@@ -71,24 +71,7 @@ class dropdown extends StatefulWidget {
   @override
   State<dropdown> createState() => _dropdownState();
 }
-// class Language {
-//   final String name;
-//   // final String languageCode;
-//   Language(this.name);
-//   static List<Language> languageList() {
-//     return <Language>[
-//       Language("English"),
-//       Language("Romania"),
-//     ];
-//   }
-//   Language? select= Language("English");
-// // int get hashCode => languageCode.hashCode;
-// // bool operator==(Object other) => other is Language && other.languageCode == languageCode;
-// }
 class _dropdownState extends State<dropdown> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,18 +80,9 @@ class _dropdownState extends State<dropdown> {
         child: ButtonTheme(
           alignedDropdown: true,
           child:
-          DropdownButton(
-            // value:language,
-            // hint: const Text("Select country",style: TextStyle(
-            //     fontSize: 12.0,
-            //     color: Colors.black
-            // ),),
-            icon: const Icon(
-                Icons.language,
-                color: Colors.white,
-              ),
+          DropdownButton<Language>(
             dropdownColor: Colors.white,
-            iconSize: 30,
+            iconEnabledColor: Colors.white,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: 12.sp,
@@ -117,7 +91,7 @@ class _dropdownState extends State<dropdown> {
             ),
             onChanged: (Language? _language) async {
               setState(() {
-                // language=_language!;
+                language = _language!;
               });
               if (_language != null) {
                 Locale _locale = await setLocale(_language.languageCode);
@@ -125,31 +99,22 @@ class _dropdownState extends State<dropdown> {
               }
             },
             // items:_dropdownmenuitem,
-            items:(Language !=null)? Language.languageList()
-                .map<DropdownMenuItem<Language>>(
-                  (e) => DropdownMenuItem<Language>(
-                value: e,
-                child: Text(e.name),
-              ),
-            )
-                .toList(): null,
+            items: <Language>[
+              Language("English", "en"),
+              Language("Romania", "ro"),
+            ].map<DropdownMenuItem<Language>>((value) {
+              return DropdownMenuItem<Language>(
+                value: value,
+                child: Text(value.name),
+              );
+            }).toList(),
+            hint: Text(
+              language != null ? language.name.toString() : "Language",
+              style: TextStyle(color: Colors.white),
+            ),
           )
-
-
-    // selectedItemBuilder: (BuildContext context) {
-    //     return Language.languageList().map((e) {
-    //       return Text(e.name.toString(),
-    //           style: const TextStyle(
-    //               color: Colors.white,
-    //               fontWeight: FontWeight.normal
-    //           )
-    //       );
-    //     }).toList();
-        )
-          ),
-        );
-
-
+    )
+    ));
   }
 }
 
